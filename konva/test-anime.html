@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://unpkg.com/konva@8.1.1/konva.min.js"></script>
+    <meta charset="utf-8" />
+    <title>Konva Shape Caching Demo</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container" style="margin:50px; background-color:yellow; padding:20px"></div>
+    <script>
+      var width = window.innerWidth;
+      var height = window.innerHeight;
+      var targetX = width / 2;
+      var targetY = height / 2;
+
+      var stage = new Konva.Stage({
+        container: 'container',
+        width: width,
+        height: height,
+      });
+
+      var layer = new Konva.Layer();
+
+      var hexagon = new Konva.RegularPolygon({
+        x: stage.width() / 2,
+        y: stage.height() / 2,
+        sides: 6,
+        radius: 20,
+        fill: 'red',
+        stroke: 'black',
+        strokeWidth: 4,
+        opacity: 0.5
+      });
+
+      var lion = null;
+      var imageObj = new Image();
+      imageObj.onload = function () {
+        lion = new Konva.Image({
+          x: 50,
+          y: 50,
+          image: imageObj,
+          width: 106,
+          height: 118,
+        });
+
+        lion.targetX = lion.x();
+        lion.targetY = lion.y();
+
+        lion.cache()
+        lion.filters([Konva.Filters.Blur]);
+        // add the shape to the layer
+        layer.add(lion);
+      };
+      imageObj.src = 'assets/lion.png';
+
+      var rect = new Konva.Rect({
+        x: 50,
+        y: 20,
+        width: 100,
+        height: 50,
+        fill: 'green',
+        stroke: 'black',
+        strokeWidth: 2,
+        opacity: 0.2,
+      });
+
+      layer.add(rect);
+      layer.add(hexagon);
+      stage.add(layer);
+
+      // the tween has to be created after the node has been added to the layer
+      var tween = new Konva.Tween({
+        node: rect,
+        duration: 1,
+        x: 140,
+        y: 90,
+        fill: 'red',
+        rotation: Math.PI * 2,
+        opacity: 1,
+        strokeWidth: 6,
+        scaleX: 1.5,
+      });
+
+
+      var amplitude = 100;
+      var period = 2000;
+      // in ms
+      var centerX = stage.width() / 2;
+
+      var anim = new Konva.Animation(function (frame) {
+        hexagon.x(
+            lion.x() + lion.width() / 2
+              + 100 * Math.sin((frame.time * 2 * Math.PI) / period)
+        );
+        hexagon.y(
+            lion.y() + lion.height() / 2
+              + 100 * Math.cos((frame.time * 2 * Math.PI) / period)
+        );
+        if (lion != null) {
+          lion.x(
+            lion.x() + (lion.targetX - lion.x() - lion.width() / 2) / 20
+          )
+          lion.y(
+            lion.y() + (lion.targetY - lion.y() - lion.height() / 2) / 20
+          )
+          lion.blurRadius(
+            40 * Math.sin((frame.time * 2 * Math.PI) / period)
+          );
+        }
+      }, layer);
+
+      stage.on('mousemove', function() {
+        lion.targetX = event.offsetX
+        lion.targetY = event.offsetY
+            console.log(lion.x())  
+        /*
+        for (p in event) {
+
+          if (p.indexOf('X') >= 0 || p.indexOf('Y') >= 0) 
+            console.log(p + ": " + event[p])  
+        }*/
+      });
+
+      hexagon.on('mouseout touchend', function() {
+          anim.start();
+          tween.play();
+      });
+    </script>
+  </body>
+</html>
