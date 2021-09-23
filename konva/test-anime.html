@@ -61,19 +61,24 @@
         lion.cache()
         lion.filters([Konva.Filters.Blur]);
         // add the shape to the layer
+        // 주의) 이미지 로딩 후 추가되므로, 가장 상단에 표시된다.
+        //      layer 에 추가한 다음, zIndex(표시순서)를 변경할 수 있다.
+        //      cf. Konva zIndex() 는 css z-index 와 다르다. 
         layer.add(lion);
+        lion.zIndex(0);
       };
       imageObj.src = 'assets/lion.png';
 
       var rect = new Konva.Rect({
-        x: 50,
+        x: 20,
         y: 20,
         width: 100,
         height: 50,
         fill: 'green',
         stroke: 'black',
         strokeWidth: 2,
-        opacity: 0.2,
+        rotation: 0,
+        //opacity: 0.2,
       });
 
       layer.add(rect);
@@ -83,9 +88,9 @@
       // the tween has to be created after the node has been added to the layer
       var tween = new Konva.Tween({
         node: rect,
-        duration: 1,
-        x: 140,
-        y: 90,
+        duration: 5,
+        x: 440,
+        y: 290,
         fill: 'red',
         rotation: 360, //Math.PI * 85,
         opacity: 1,
@@ -102,11 +107,11 @@
       var anim = new Konva.Animation(function (frame) {
         hexagon.x(
             lion.x()
-              + 100 * Math.sin((frame.time * 2 * Math.PI) / period)
+              + 70 * Math.sin((frame.time * 2 * Math.PI) / period)
         );
         hexagon.y(
             lion.y()
-              + 100 * Math.cos((frame.time * 2 * Math.PI) / period)
+              + 70 * Math.cos((frame.time * 2 * Math.PI) / period)
         );
         if (lion != null) {
           lion.x(
@@ -120,7 +125,7 @@
           );
           r = frame.time * 90 / period;
           lion.rotation(r)
-          console.log(lion.x() + ", " + lion.y() + " : " + lion.rotation())
+          //console.log(lion.x() + ", " + lion.y() + " : " + lion.rotation())
         }
       }, layer);
 
