@@ -44,11 +44,15 @@
       var imageObj = new Image();
       imageObj.onload = function () {
         lion = new Konva.Image({
-          x: 50,
-          y: 50,
+          x: 0,
+          y: 0,
           image: imageObj,
           width: 106,
           height: 118,
+          // x,y 위치를 중앙에 맞춤.
+          offsetX: 106/2,
+          offsetY: 118/2,
+          fill: 'black'
         });
 
         lion.targetX = lion.x();
@@ -83,7 +87,7 @@
         x: 140,
         y: 90,
         fill: 'red',
-        rotation: Math.PI * 2,
+        rotation: 360, //Math.PI * 85,
         opacity: 1,
         strokeWidth: 6,
         scaleX: 1.5,
@@ -97,23 +101,26 @@
 
       var anim = new Konva.Animation(function (frame) {
         hexagon.x(
-            lion.x() + lion.width() / 2
+            lion.x()
               + 100 * Math.sin((frame.time * 2 * Math.PI) / period)
         );
         hexagon.y(
-            lion.y() + lion.height() / 2
+            lion.y()
               + 100 * Math.cos((frame.time * 2 * Math.PI) / period)
         );
         if (lion != null) {
           lion.x(
-            lion.x() + (lion.targetX - lion.x() - lion.width() / 2) / 20
+            lion.x() + (lion.targetX - lion.x()) / 20
           )
           lion.y(
-            lion.y() + (lion.targetY - lion.y() - lion.height() / 2) / 20
+            lion.y() + (lion.targetY - lion.y()) / 20
           )
           lion.blurRadius(
             40 * Math.sin((frame.time * 2 * Math.PI) / period)
           );
+          r = frame.time * 90 / period;
+          lion.rotation(r)
+          console.log(lion.x() + ", " + lion.y() + " : " + lion.rotation())
         }
       }, layer);
 
