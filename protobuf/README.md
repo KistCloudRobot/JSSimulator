@@ -15,9 +15,10 @@ cp sample_pb.js ./server/
 cp sample_pb.js ./client/
 ```
 
-### start server
+### start server/client
 ```
 node server.js
+node client.js
 ```
 
 
