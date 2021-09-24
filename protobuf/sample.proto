@@ -16,7 +16,7 @@ message VirtualObject {
     Point size = 4;
     
     // properties 대체.
-    repeated Flag flags = 5;  
+    // repeated Flag flags = 5;  
     // 또는
     bool Collidable = 5;
     bool Grabbable = 6;

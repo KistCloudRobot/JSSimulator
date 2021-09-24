@@ -1,7 +1,7 @@
 'use strict'
 const VirtualObject = require('./sample_pb')
 const Express = require('express')
-const Https = require('https')
+const Https = require('http')
 const WebSocket = require('ws')
 const FileSystem = require('fs')
 const app = Express()
@@ -10,9 +10,9 @@ app.use(function (req, res) {
 })
 
 const server = Https.createServer({
-    key: FileSystem.readFileSync('key.pem'),
-    cert: FileSystem.readFileSync('cert.pem'),
-    passphrase: 'qwer12#$'
+    // key: FileSystem.readFileSync('key.pem'),
+    // cert: FileSystem.readFileSync('cert.pem'),
+    // passphrase: 'qwer12#$'
 }, app)
 
 function VPoint(x, y) {
@@ -31,6 +31,7 @@ wss.on('connection', function connection(ws) {
     ws.on('message', function incoming(message) {
         console.log('received: %s', message)
     })
+    console.log('new client connected')
     var message = new proto.VirtualObject();
     message.setName('Hello Protocol Buffers')
     // var pos = new proto.Point();

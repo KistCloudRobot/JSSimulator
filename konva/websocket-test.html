@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://unpkg.com/konva@8.1.1/konva.min.js"></script>
+    <meta charset="utf-8" />
+    <title>Konva Shape Caching Demo</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #f0f0f0;
+      }
+    </style>
+    <script src="bundle.js"></script>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script>
+console.log("Hello");
+
+// const ws = new WebSocket('wss://localhost:7070/', {
+//     origin: 'https://localhost:7070'
+// })
+const ws = new WebSocket('ws://localhost:7070/')
+ws.binaryType = 'arraybuffer' // <- binary 사용 시 지정 필수
+
+ws.onopen= function open() {
+    console.log('connected')
+}
+ws.onclose = function close() {
+    console.log('disconnected')
+}
+ws.onmessage = function incoming(data, flags) {
+    console.log('message')
+    var bytes = data.data.slice(0); // 오류 -> Array.prototype.slice.call(data.data, 0)
+    var message = proto.VirtualObject.deserializeBinary(bytes)
+    console.log(message.toObject());
+    console.log(message.getName())
+    console.log(message.getPos().getX() + ", " + message.getPos().getY());
+    console.log(message.getSize().getX() + ", " + message.getSize().getY());
+    ws.close()
+}
+
+var width = window.innerWidth;
+var height = window.innerHeight;
+
+var stage = new Konva.Stage({
+  container: 'container',
+  width: width,
+  height: height,
+});
+
+var layer = new Konva.Layer();
+
+var star = new Konva.Star({
+  innerRadius: 20,
+  outerRadius: 50,
+  fill: 'red',
+  stroke: 'black',
+  strokeWidth: 5,
+  numPoints: 6,
+  x: 60,
+  y: 60,
+  draggable: true,
+  shadowOffset: { x: 5, y: 5 },
+  shadowColor: 'black',
+  shadowBlur: 5,
+  shadowOpacity: 0.5,
+  shadowForStrokeEnabled: false,
+});
+
+layer.add(star);
+stage.add(layer);
+star.cache();
+
+var clone;
+for (var n = 0; n < 10; n++) {
+  clone = star.clone({
+    x: Math.random() * stage.width(),
+    y: Math.random() * stage.height(),
+  });
+  clone.cache();
+  layer.add(clone);
+}
+    </script>
+  </body>
+</html>

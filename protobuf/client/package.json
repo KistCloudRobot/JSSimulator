@@ -1,6 +1,18 @@
 {
+  "scripts": {
+    "build": "webpack"
+  },
+  "compilerOptions": {
+    "paths": {
+      "crypto": [
+        "./node_modules/crypto-browserify"
+      ]
+    }
+  },
   "dependencies": {
     "google-protobuf": "^3.17.3",
+    "webpack": "^5.53.0",
+    "webpack-cli": "^4.8.0",
     "ws": "^8.0.0"
   }
 }
