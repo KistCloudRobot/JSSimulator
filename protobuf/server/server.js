@@ -16,7 +16,11 @@ const server = Https.createServer({
 }, app)
 
 function VPoint(x, y) {
-    // 상속 3) super constructor call
+    // 상속 3) super constructor call. 
+    // 아래 코드와 동일.
+    // var pos = new proto.Point();
+    // pos.setX(10);
+    // pos.setY(20);
     proto.Point.call(this);
     this.setX(x)
     this.setY(y)
@@ -34,9 +38,6 @@ wss.on('connection', function connection(ws) {
     console.log('new client connected')
     var message = new proto.VirtualObject();
     message.setName('Hello Protocol Buffers')
-    // var pos = new proto.Point();
-    // pos.setX(10);
-    // pos.setY(20);
     message.setPos(new VPoint(11, 22));
     var size = new proto.Point();
     size.setX(300);

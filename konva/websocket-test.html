@@ -35,9 +35,13 @@ ws.onmessage = function incoming(data, flags) {
     var bytes = data.data.slice(0); // 오류 -> Array.prototype.slice.call(data.data, 0)
     var message = proto.VirtualObject.deserializeBinary(bytes)
     console.log(message.toObject());
-    console.log(message.getName())
-    console.log(message.getPos().getX() + ", " + message.getPos().getY());
-    console.log(message.getSize().getX() + ", " + message.getSize().getY());
+    console.log("name: " + message.getName())
+    console.log("pos: " + message.getPos().getX() + ", " + message.getPos().getY());
+    console.log("size: " + message.getSize().getX() + ", " + message.getSize().getY());
+    console.log("flags: [" + message.getFlagsList() + "]")
+
+    console.log("properties: " + message.getPropertiesMap())
+    console.log("properties['p1']: " + message.getPropertiesMap().get("p1"))
     ws.close()
 }
     </script>
