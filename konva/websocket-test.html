@@ -3,7 +3,7 @@
   <head>
     <script src="https://unpkg.com/konva@8.1.1/konva.min.js"></script>
     <meta charset="utf-8" />
-    <title>Konva Shape Caching Demo</title>
+    <title>WebSocket Demo</title>
     <style>
       body {
         margin: 0;
@@ -17,18 +17,25 @@
   <body>
     <div id="container"></div>
     <script>
+
+console.log("hello");    
 // https 사용 시.
 // const ws = new WebSocket('wss://localhost:7070/', {
 //     origin: 'https://localhost:7070'
 // })
-const ws = new WebSocket('ws://localhost:7070/')
-ws.binaryType = 'arraybuffer' // <- 중요! binary 사용 시 지정 필수
+//const ws = new WebSocket('ws://localhost:7070/')
+//ws.binaryType = 'arraybuffer' // <- 중요! binary 사용 시 지정 필수
+
+const ws = new WebSocket('ws://192.168.10.117:8080/')
 
 ws.onopen= function open() {
     console.log('connected')
 }
 ws.onclose = function close() {
     console.log('disconnected')
+}
+ws.onerror = function error(err) {
+    console.log('Error: ' + err)
 }
 ws.onmessage = function incoming(data, flags) {
     console.log('message')
@@ -44,6 +51,9 @@ ws.onmessage = function incoming(data, flags) {
     console.log("properties['p1']: " + message.getPropertiesMap().get("p1"))
     ws.close()
 }
+
+console.log("ready!");    
+
     </script>
   </body>
 </html>
