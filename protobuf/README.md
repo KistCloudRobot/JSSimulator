@@ -8,8 +8,8 @@ https://semtax.tistory.com/27
 
 ### protobuf compile
 ```
-protoc --js_out=import_style=commonjs,binary:. sample.proto
-protoc --js_out=library=pbjs,binary:. sample.proto
+protoc --js_out=import_style=commonjs,binary:. robo_simul.proto
+#protoc --js_out=library=pbjs,binary:. sample.proto
 
 cp sample_pb.js ./server/
 cp sample_pb.js ./client/

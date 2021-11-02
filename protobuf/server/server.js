@@ -6,7 +6,7 @@ const WebSocket = require('ws')
 const FileSystem = require('fs')
 const app = Express()
 app.use(function (req, res) {
-    res.send({ msg: 'hello' })
+    res.send({ msg: 'hello22' })
 })
 
 const server = Https.createServer({
