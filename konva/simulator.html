@@ -17,10 +17,10 @@
   <script src="simul_ws.js"></script>
   <script src="simul_canvas.js"></script>
   <body>
-    <div id="container" style="margin:50px; background-color:yellow; padding:20px"></div>
+    <div id="container" style="height:80vw; background-color:yellow; padding:20px; background:no-repeat 0 0/100% url(Layout_211109.png)"></div>
     <script>
       const canvas = new SimulatorCanvas('container');
-      connectSimulator('ws://192.168.10.211:30303/WebUI', canvas);
+      connectSimulator('ws://192.168.10.217:30303/WebUI', canvas);
     </script>
   </body>
 </html>
