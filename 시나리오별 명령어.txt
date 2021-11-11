@@ -1,0 +1,63 @@
+시뮬레이터 우측 하단 명령창에 case1입력 후 엔터를 누르시면 실행되도록 만들었습니다.
+case2, case3, cas4도 각각 입력하고 엔터를 누르시면 case에 따라 로봇이 움직이도록 만들었습니다.
+
+case1 : 	4대 동시 동작
+
+	4대의 로봇이 움직이는 명령어
+		ARM_LIFT1이 212번 노드로 move
+		ARM_LIFT2이 226번 노드로 move
+		ARM_TOW1이 240번 노드로 move
+		ARM_TOW2이 235번 노드로 move
+	
+case2 : 	회피동작
+
+	ARM_TOW1, ARM_TOW2 회피 동작
+		ARM_TOW1이 203번 노드로 move
+		ARM_TOW2가 301번 노드로 회피 후 239번 노드로 move
+
+case3 : 	단일 동작
+
+	ARM_LIFT1이 1번 노드의 물체를 18번 노드로 옮김
+	
+
+case4 : 	2대 동시 동작
+
+		ARM_LIFT2가 202번노드로 move
+		ARM_TOW2가 204번 노드로 move
+
+
+
+
+
+
+
+
+시뮬레이터 우측 하단 명령창에 아래와 같은 방법으로도 실행할 수 있습니다.
+
+case1:	
+		move 0 212
+		move 1 226
+		move 2 240
+		move 3 235	(ARM_TOW1이 230번 노드에 도착했을 때 명령)
+
+
+
+case2:	
+		move 2 203
+		move 3 301	(ARM_TOW1이 239번 노드에 도착했을 때 명령)
+
+
+
+
+case3:	
+		move 0 206
+		load 0 1		(ARM_LIFT1이 206번 노드에 도착했을 때 명령)
+		move 0 225
+		unload 0 18	(ARM_LIFT1이 225번 노드에 도착했을 때 명령)
+
+
+
+
+case4:	
+		move 1 202
+		move 3 204

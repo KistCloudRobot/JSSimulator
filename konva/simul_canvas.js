@@ -20,12 +20,24 @@ class SimulatorCanvas {
     }
 
     setLocation(k_obj, simul_point) {
+        if (false) {
         const scale = this.stage.width() / 28; 
         const mid_y = this.stage.height() / 2;
         const x = (simul_point.x - 150) * scale + this.stage.width()/10;
         const y = (147-simul_point.y) * scale + this.stage.width()/2;
         k_obj.x(x);
         k_obj.y(y);
+        }
+        else {
+        const scale_x = this.stage.width() / 24.9; 
+        const scale_y = this.stage.width() / 26.3; 
+        const mid_y = this.stage.height() / 2;
+        const x = (simul_point.x - 150) * scale_x + this.stage.width()*0.02;
+        const y = (-simul_point.y - 138.3) * scale_y;
+        //const y = (simul_point.y - 138) * scale_y;// + this.stage.width()*0.778;
+        k_obj.x(x);
+        k_obj.y(y);
+        }
     }
 
 
@@ -187,8 +199,8 @@ class SimulatorCanvas {
         if (k_obj != null) {
             switch (change.content) {
                 case "move":
-                    k_obj.moveX = change.movement.x * 20;
-                    k_obj.moveY = -change.movement.y * 20;
+                    k_obj.moveX = change.movement.x * 18;
+                    k_obj.moveY = -change.movement.y * 18;
                     k_obj.startTime = 0;
                     break;
                 case "endMove":

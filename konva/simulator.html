@@ -17,19 +17,42 @@
       }
     </style>
   </head>
+  <script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
   <script src="robo_simul.js"></script>
   <script src="simul_ws.js"></script>
   <script src="simul_canvas.js"></script>
   <body>
-    <div id="container"></div>
+    <div id="app"> 
+      <table>
+        <tr>
+          <td>
+            <div id="container"></div>
+          </td>
+          <td style="vertical-align:top; text-align: right">
+            <input type="text" v-model="wsUrl">
+            <button @click="connect()">Connect</button>
+          </td>
+        </tr>
+      </table>
+    </div>
     <script>
+      let vm = new Vue ({
+        el: '#app', // el 속성으로 Vue Instance가 그려질 지점을 지정
+        data: {
+          messages: [ ],
+          wsUrl: '192.168.10.214:30303/WebUI'
+        },
+        methods: {
+          connect() {
+            const canvas = new SimulatorCanvas('container');
+            connectSimulator('ws://' + this.wsUrl, canvas);
+          }
+        }
+      });
+
       const container = document.getElementById("container");
       container.offsetHeight = window.innerHeight; 
-      container.style['width'] = (1600 * window.innerHeight / 1280) + 'px'; 
-      // container.style.zoom = window.innerHeight / 1280; 
-
-      const canvas = new SimulatorCanvas('container');
-      connectSimulator('ws://192.168.10.217:30303/WebUI', canvas);
+      container.style['width'] = (1600 * window.innerHeight / 1280) + 'px';
     </script>
   </body>
 </html>
