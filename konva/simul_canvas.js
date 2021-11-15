@@ -221,7 +221,7 @@ class SimulatorCanvas {
         if (k_obj != null) {
             switch (change.content) {
                 case "turn":
-                    k_obj.rotateSpeed = change.movement.x;// / 180; 
+                    k_obj.rotateSpeed = -change.movement.x;// / 180; 
                     k_obj.rotateTo = -change.movement.y;
                     break;
                 case "endTurn":
