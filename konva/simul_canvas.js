@@ -48,7 +48,23 @@ class SimulatorCanvas {
         this.left = 9999999;
         for (let obj of env.objectsList) {
             if (obj.type != "Product") {
-                this.createObject(obj, layer);
+                let k_obj = this.createObject(obj, layer);
+                for (let p of obj.propertyMap) {
+                    if (p[0] == 'edges') {
+                        let peers = p[1].split(',');
+                        for (let peer_id of peers) {
+                            let peer = this.objects[peer_id];
+                            if (peer) {
+                                var line = new Konva.Line({
+                                    points: [peer.x(), peer.y(), k_obj.x(), k_obj.y()],
+                                    stroke: 'green',
+                                    strokeWidth: 1
+                                });
+                                layer.add(line)
+                            }
+                        }
+                    }
+                }
             }
         }
         for (let obj of env.objectsList) {
@@ -87,56 +103,62 @@ class SimulatorCanvas {
         this.stage.add(layer);
 
         const canvas = this;
+        this.lastFrame = 0;
         var anim = new Konva.Animation((frame) => {
             const scale = canvas.stage.width() / 1000 / 480;
+            const interval = frame.time - canvas.lastFrame;
+            canvas.lastFrame = frame.time;
             for (const p in canvas.objects) {
                 var k_obj = canvas.objects[p];
-
+                
                 if (k_obj.moveX != 0 || k_obj.moveY != 0) {
-                    const xx = (frame.time - k_obj.lastTime) * k_obj.moveX * scale;
-                    const yy = (frame.time - k_obj.lastTime) * k_obj.moveY * scale;
+                    const xx = interval * k_obj.moveX * scale;
+                    const yy = interval * k_obj.moveY * scale;
                     // console.log(`move ${frame.time / 1000} ${k_obj.x()} -> ${xx} ${k_obj.y()} -> ${yy}`)
                     k_obj.x(k_obj.x() + xx);
                     k_obj.y(k_obj.y() + yy);
                 }
-                k_obj.lastTime = frame.time;
+                if (k_obj.rotateSpeed) {
+                    k_obj.rotation(k_obj.rotation() + k_obj.rotateSpeed * interval / 800)
+                }
             }
+
         }, layer);
         anim.start();
     }
 
     createObject(obj, layer_) {
-        var _obj = null;
+        var k_obj = null;
         var showText = false;
         switch (obj.type) {
             case "Vertex":
-                _obj = this.createRect(5, 5, 'black');
+                k_obj = this.createRect(5, 5, 'black');
                 showText = true;
                 break;
             case "Station":
-                _obj = this.createRect(20, 20, '#03c6fc');
+                k_obj = this.createRect(20, 20, '#03c6fc');
                 break;
             case "Charger":
-                _obj = this.createRect(20, 20, '#28fc03');
+                k_obj = this.createRect(20, 20, '#28fc03');
                 break;
             case "Product":
-                _obj = this.createRect(10, 10, 'red');
+                k_obj = this.createRect(10, 10, 'red');
                 break;
             case "Door":
-                _obj = this.createRect(50, 5, 'green');
+                k_obj = this.createRect(50, 5, 'green');
                 break;
             case "Robot":
-                _obj = this.createRect(16, 16, '#fcba03');
+                k_obj = this.createRect(16, 16, '#fcba03');
                 showText = true;
                 break;
             case "Lion":
-                _obj = this.createLion(obj);
+                k_obj = this.createLion(obj);
                 break;
             default:
                 return null;
                 alert("error")
         }
-        // return _obj;
+        // return k_obj;
         var group = new Konva.Group({
         });
 
@@ -145,7 +167,7 @@ class SimulatorCanvas {
         group.moveX = 0;
         group.moveY = 0;
 
-        group.add(_obj);
+        group.add(k_obj);
         layer_.add(group);
 
         this.setLocation(group, obj.position)
@@ -198,6 +220,16 @@ class SimulatorCanvas {
         console.log(change)
         if (k_obj != null) {
             switch (change.content) {
+                case "turn":
+                    k_obj.rotateSpeed = change.movement.x;// / 180; 
+                    k_obj.rotateTo = -change.movement.y;
+                    break;
+                case "endTurn":
+                    k_obj.rotateSpeed = 0; 
+                    k_obj.rotation(k_obj.rotateTo);
+                    //k_obj.rotateTo;
+                    break;
+
                 case "move":
                     k_obj.moveX = change.movement.x * 18;
                     k_obj.moveY = -change.movement.y * 18;
